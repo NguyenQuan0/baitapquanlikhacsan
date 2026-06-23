@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RoomModule } from './modules/room/room.module';
+import { CookieController } from './cookie/cookie.controller';
 import { CustomerModule } from './modules/customer/customer.module';
 import { BookingModule } from './modules/booking/booking.module';
 import { StaffModule } from './modules/staff/staff.module';
@@ -11,11 +12,11 @@ import { InvoiceModule } from './modules/invoice/invoice.module';
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: '',       // Codespaces thường không có password
-      database: 'quan_ly_khach_san',
+      host: process.env.DB_HOST ?? 'localhost',
+      port: Number(process.env.DB_PORT) || 3306,
+      username: process.env.DB_USER ?? 'root',
+      password: process.env.DB_PASSWORD ?? 'pass',
+      database: process.env.DB_NAME ?? 'hotel',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: false,
       charset: 'utf8mb4',
@@ -27,5 +28,6 @@ import { InvoiceModule } from './modules/invoice/invoice.module';
     ServiceModule,
     InvoiceModule,
   ],
+  controllers: [CookieController],
 })
 export class AppModule {}
